@@ -50,11 +50,11 @@ def choose_next_node(temp, stepSize):
     
     currentNode = acceptableWorseStates[random.randint(0, len(acceptableWorseStates) -1)]
 
-# Varaible set = [T, F] etc...
+# Variable set = [T, F] etc...
 def check_clauses(variableSet):
     score = 0
     for claus in clauses:
-        # if solvable with vairable state add to score
+        # if solvable with variable state add to score
         #return score
         pass
     return 0
