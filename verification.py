@@ -22,34 +22,44 @@ def verification(clauses, numvar, outputfile):
 
     count = 0
     for clause in clauses:
-        var1 = clause[0]
-        var2 = clause[1]
-        # if the variable in the current clause is positive, then set the first variable of the clause to
-        # what it was set to in setvar. since the variables in the clause start numbering at one,
-        # subtract one to get the index of that variable in the array
-        if var1 > 0:
-            first = setvar[var1-1]
-        # if the variable in the clause is negative, then the opposite of what it was set to in setvar is what
-        # should be checked in the clause. the index of the variable in the array can be checked by removing the
-        # sign and subtracting one
-        elif setvar[abs(var1)-1] == 0:
-            first = 1
-        else:
-            first = 0
-
-        # the same logic that was applied to var1 to set the first half of the clause is applied to the second
-        if var2 > 0:
-            second = setvar[var2-1]
-        elif setvar[abs(var2)-1] == 0:
-            second = 1
-        else:
-            second = 0
-
-        # if the resulting first half or second half of the clause is true, then we add one to the count of
-        # clauses that the given solution satisfies
-        if first or second:
+        if check_clause(setvar, clause):
             count += 1
 
     # since we are checking if the number of clauses satisfied by the solution is equal to the number of
     # clauses claimed to be satisfied, return this value as a boolean
     return count == claim
+
+
+def check_clause(setvar, clause):
+    """
+    checks a clause for if the set variables satisfy the clause
+    :param setvar: a list of what each of the variables are set to
+    :param clause: the clause to check truth for
+    :return: true if the clause is satisfied and false if the clause is not satisfied
+    """
+    var1 = clause[0]
+    var2 = clause[1]
+    # if the variable in the current clause is positive, then set the first variable of the clause to
+    # what it was set to in setvar. since the variables in the clause start numbering at one,
+    # subtract one to get the index of that variable in the array
+    if var1 > 0:
+        first = setvar[var1 - 1]
+    # if the variable in the clause is negative, then the opposite of what it was set to in setvar is what
+    # should be checked in the clause. the index of the variable in the array can be checked by removing the
+    # sign and subtracting one
+    elif setvar[abs(var1) - 1] == 0:
+        first = 1
+    else:
+        first = 0
+
+    # the same logic that was applied to var1 to set the first half of the clause is applied to the second
+    if var2 > 0:
+        second = setvar[var2 - 1]
+    elif setvar[abs(var2) - 1] == 0:
+        second = 1
+    else:
+        second = 0
+
+    # if the resulting first half or second half of the clause is true, then we add one to the count of
+    # clauses that the given solution satisfies
+    return first or second
