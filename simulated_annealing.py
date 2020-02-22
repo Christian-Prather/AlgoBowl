@@ -6,6 +6,7 @@ import process_input
 import random
 import time
 import math
+import verification
 
 variables, clauses = process_input.process_input("inputs/input_4_2.txt")
 startState = []
@@ -28,44 +29,59 @@ def generate_start_state():
 def get_currentNode():
     return currentNode
 
+def convert(varSet):
+    conversion = []
+    for variable in varSet:
+        if variable == 'T':
+            conversion.append(1)
+        else:
+            conversion.append(0)
+    return conversion
 # Loop through all nodes in neighbor and compute their funciton
 # value for selection
 # Choose random high probability state as next option
 def choose_next_node(temp, stepSize):
     global currentNode
+    global currentScore
+
     acceptableWorseStates = []
     neigbors = generate_neighbor_nodes()
     for option in neigbors:
         #option = [T,F] etc
-        conversion = []
-        for variable in option:
-            if variable == 'T':
-                conversion.append(1)
-            else:
-                conversion.append(0)
+        conversion = convert(option)
         print(conversion)
         potentialScore = check_clauses(conversion)
         if potentialScore > currentScore:
+            currentScore = potentialScore
             # Always select this new state
             currentNode = option
-            break
+            return 0
         else:
             loss = abs(currentScore - potentialScore)
             probability = math.exp(-(loss/temp))
+            print ("Loss: {} Probability: {}".format(loss, probability))
             if (random.random() < probability):
                 acceptableWorseStates.append(option)
-    
+    print("Len {}".format(len(acceptableWorseStates)))
+ 
     currentNode = acceptableWorseStates[random.randint(0, len(acceptableWorseStates) -1)]
+    # TODO: clp 2-21 Fix this store it dont just recalculate it
+    currentNodeConversion = convert(currentNode)
+    currentScore = check_clauses(currentNodeConversion)
+    print(currentScore)
 
 # Variable set = [T, F] etc...
 def check_clauses(variableSet):
     # Map into 1 T 0 False for Validation
     score = 0
-    for claus in clauses:
+    for clause in clauses:
+        # print("Varification: {}".format(verification.check_clause(variableSet, clause)))
+        score += verification.check_clause(variableSet, clause)
+
+
         # if solvable with variable state add to score
         #return score
-        pass
-    return 0
+    return score
 
 
 
