@@ -37,7 +37,14 @@ def choose_next_node(temp, stepSize):
     neigbors = generate_neighbor_nodes()
     for option in neigbors:
         #option = [T,F] etc
-        potentialScore = check_clauses(option)
+        conversion = []
+        for variable in option:
+            if variable == 'T':
+                conversion.append(1)
+            else:
+                conversion.append(0)
+        print(conversion)
+        potentialScore = check_clauses(conversion)
         if potentialScore > currentScore:
             # Always select this new state
             currentNode = option
@@ -52,6 +59,7 @@ def choose_next_node(temp, stepSize):
 
 # Varaible set = [T, F] etc...
 def check_clauses(variableSet):
+    # Map into 1 T 0 False for Validation
     score = 0
     for claus in clauses:
         # if solvable with vairable state add to score
