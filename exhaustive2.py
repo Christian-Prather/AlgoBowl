@@ -2,6 +2,7 @@ from itertools import permutations
 import process_input
 import process_output
 
+# holds the possible solutions
 solutions = []
 
 
@@ -18,6 +19,8 @@ def exhaustive(input_file):
     # Find all possible solutions depending on number of variables
     # ex. 2 variables provides [0, 0], [0, 1], etc.
     arr = [0] * variables
+    # since each variable can only be true or false, the possible permutations are equivalent to a
+    # binary string of length equal to the number of variables
     generateBinaryStrings(variables, arr, 0)
 
     greatest_satisfied = -1
