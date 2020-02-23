@@ -8,7 +8,7 @@ import time
 import math
 import verification
 
-variables, clauses = process_input.process_input("inputs/input_4_2.txt")
+variables, clauses = process_input.process_input("inputs/input_100_10.txt")
 startState = []
 currentNode = []
 currentScore = 0
@@ -27,7 +27,7 @@ def generate_start_state():
     currentNode = startState.copy()
 
 def get_currentNode():
-    return currentNode
+    return currentNode, currentScore
 
 def convert(varSet):
     conversion = []
@@ -45,11 +45,11 @@ def choose_next_node(temp, stepSize):
     global currentScore
 
     acceptableWorseStates = []
-    neigbors = generate_neighbor_nodes()
+    neigbors = generate_neighbor_nodes(stepSize)
     for option in neigbors:
         #option = [T,F] etc
         conversion = convert(option)
-        print(conversion)
+        #print(conversion)
         potentialScore = check_clauses(conversion)
         if potentialScore > currentScore:
             currentScore = potentialScore
@@ -62,49 +62,46 @@ def choose_next_node(temp, stepSize):
             print ("Loss: {} Probability: {}".format(loss, probability))
             if (random.random() < probability):
                 acceptableWorseStates.append(option)
-    print("Len {}".format(len(acceptableWorseStates)))
  
-    currentNode = acceptableWorseStates[random.randint(0, len(acceptableWorseStates) -1)]
-    # TODO: clp 2-21 Fix this store it dont just recalculate it
-    currentNodeConversion = convert(currentNode)
-    currentScore = check_clauses(currentNodeConversion)
-    print(currentScore)
+    if len(acceptableWorseStates) > 0:
+        currentNode = acceptableWorseStates[random.randint(0, len(acceptableWorseStates) -1)]
+        # TODO: clp 2-21 Fix this store it dont just recalculate it
+        currentNodeConversion = convert(currentNode)
+        currentScore = check_clauses(currentNodeConversion)
+        print(currentScore)
 
 # Variable set = [T, F] etc...
 def check_clauses(variableSet):
     # Map into 1 T 0 False for Validation
     score = 0
     for clause in clauses:
-        # print("Varification: {}".format(verification.check_clause(variableSet, clause)))
         score += verification.check_clause(variableSet, clause)
-
-
-        # if solvable with variable state add to score
-        #return score
     return score
 
-
-
-def generate_neighbor_nodes():
+def generate_neighbor_nodes(stepSize):
 # variables a list of t f for current state [T, T]
 # variable is a sigle one
-# neighbors = {['T', 'F'], ['F', 'T']}
+# neighbors = random adjustment of variables
     neighbors = []
-
-    for i in range(len(currentNode)):
-        # Get a copy of current node state
+    for i in range(stepSize):
         neighbor = currentNode.copy()
-        
-        if neighbor[i] == 'T':
-            # change it to F and dont touch the rest 
-            neighbor[i] = 'F'
+        randomIndex = random.randint(0, len(currentNode)-1)
+        if neighbor[randomIndex] == 'T':
+            neighbor[randomIndex] = 'F'
         else:
-            neighbor[i] = 'T'
-            
-        # add to neigbors set
-        #print("Neighbor: {}".format(neighbor))
-        neighbors.append(neighbor)  
-    print("Neighbors: {}".format(neighbors))
+            neighbor[randomIndex] = 'T'
+        neighbors.append(neighbor)
+
+    # for i in range(len(currentNode)):
+    #     # Get a copy of current node state
+    #     neighbor = currentNode.copy()
+        
+    #     if neighbor[i] == 'T':
+    #         # change it to F and dont touch the rest 
+    #         neighbor[i] = 'F'
+    #     else:
+    #         neighbor[i] = 'T'
+    #     neighbors.append(neighbor)  
     return neighbors
 
    
