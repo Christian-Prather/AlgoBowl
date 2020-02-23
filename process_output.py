@@ -12,5 +12,8 @@ def process_output(clauses_satisfied, setvar, filename):
         for var in setvar:
             # put the setting of each distinct variable on their own line
             f.write('\n')
-            f.write(str(var))
+            if var == 1 or var == 'T':
+                f.write(str(1))
+            else:
+                f.write(str(0))
     return

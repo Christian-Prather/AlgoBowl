@@ -1,6 +1,8 @@
 import simulated_annealing
 import exhaustive2
 import input_creation
+import process_output
+import verification
 
 
 TEMP = 2500
@@ -19,9 +21,15 @@ def main():
         TEMP *= COOLING
         print("TEMP:---------------------{}".format(TEMP))
 
-    print(simulated_annealing.get_currentNode())
+    s = simulated_annealing.get_currentNode()
+    print(s)
+    variables = s[0]
+    claim = s[1]
+    process_output.process_output(claim, variables, "output_25000_1000.txt")
+    print(verification.verification(simulated_annealing.clauses, simulated_annealing.variables, "output_25000_1000.txt"))
     # print("Exhaustive Comp......")
     # exhaustive2.exhaustive("inputs/input_100_10.txt")
     # print("Done")
+
 if __name__== "__main__":
     main()
