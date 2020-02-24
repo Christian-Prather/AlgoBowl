@@ -4,13 +4,14 @@ import input_creation
 import process_output
 import verification
 
-
 TEMP = 2500
 COOLING = 0.99
 STEP_SIZE = 30
 MIN_TEMP = 5
+
+
 def main():
-    #Generate File
+    # Generate File
     # input_creation.input_creation(25000,1000)
     print("AlgoBowl.......")
     global TEMP
@@ -25,11 +26,12 @@ def main():
     print(s)
     variables = s[0]
     claim = s[1]
-    process_output.process_output(claim, variables, "output_25000_1000.txt")
-    print(verification.verification(simulated_annealing.clauses, simulated_annealing.variables, "output_25000_1000.txt"))
+    process_output.process_output(claim, variables, "outputs/output_25000_1000.txt")
+    print(verification.verification("inputs/input_25000_1000.txt", "outputs/output_25000_1000.txt"))
     # print("Exhaustive Comp......")
     # exhaustive2.exhaustive("inputs/input_100_10.txt")
     # print("Done")
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     main()

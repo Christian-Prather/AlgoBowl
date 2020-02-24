@@ -1,4 +1,7 @@
-def verification(clauses, numvar, outputfile):
+import process_input
+
+
+def verification(inputfile, outputfile):
     """
     checks whether the solution given in the output file satisfies the number of clauses in the input that it claims to
     :param clauses: the clauses to be checked. a list of tuples containing integers indicating whether the numbered
@@ -9,6 +12,8 @@ def verification(clauses, numvar, outputfile):
     :return: true if what the variables are set to satisfy the number of clauses as indicated at the top of the output
         file.
     """
+    numvar, clauses = process_input.process_input(inputfile)
+
     with open(outputfile, 'r') as f:
         # set the first line of the output file to the claim
         # this is the number of clauses the solution claims to satisfy
@@ -27,6 +32,8 @@ def verification(clauses, numvar, outputfile):
 
     # since we are checking if the number of clauses satisfied by the solution is equal to the number of
     # clauses claimed to be satisfied, return this value as a boolean
+    print(count)
+    print(claim)
     return count == claim
 
 
