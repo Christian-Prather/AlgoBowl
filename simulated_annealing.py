@@ -8,10 +8,31 @@ import time
 import math
 import verification
 
-variables, clauses = process_input.process_input("inputs/input_100_10.txt")
+variables = 0
+clauses =0 
 startState = []
 currentNode = []
 currentScore = 0
+
+def initialSetup(inputFile):
+    global startState
+    global currentNode
+    global currentScore
+    global variables
+    global clauses
+
+    variables = 0
+    clauses =0 
+    startState.clear()
+    currentNode.clear()
+    currentScore = 0
+
+
+    variables, clauses = process_input.process_input("group_inputs/"+ inputFile)
+    generate_start_state()
+
+
+
 
 def generate_start_state():
     # Pick a random state
@@ -59,7 +80,7 @@ def choose_next_node(temp, stepSize):
         else:
             loss = abs(currentScore - potentialScore)
             probability = math.exp(-(loss/temp))
-            print ("Loss: {} Probability: {}".format(loss, probability))
+            # print ("Loss: {} Probability: {}".format(loss, probability))
             if (random.random() < probability):
                 acceptableWorseStates.append(option)
  
@@ -68,7 +89,7 @@ def choose_next_node(temp, stepSize):
         # TODO: clp 2-21 Fix this store it dont just recalculate it
         currentNodeConversion = convert(currentNode)
         currentScore = check_clauses(currentNodeConversion)
-        print(currentScore)
+        #print(currentScore)
 
 # Variable set = [T, F] etc...
 def check_clauses(variableSet):
